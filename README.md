@@ -51,6 +51,7 @@ mkdir -p data\documents
 ```
 
 Copie os seguintes arquivos para `data\documents\`:
+
 - `SAEB2025_Apresentação_2_Ano_VF.pptx`
 - `SAEB2025_Apresentação_Aplicadores_5_9_3_VF.pptx`
 - `SCAN0000.PDF`
@@ -115,7 +116,8 @@ No dashboard do Vercel:
 
 Após processar os documentos localmente, você precisa fazer upload do arquivo `data/processed/documents.json` para o Vercel:
 
-**Opção 1: Via Git**
+#### Opção 1: Via Git
+
 ```bash
 git add data/processed/documents.json
 git commit -m "Add processed documents"
@@ -172,7 +174,9 @@ saeb-search-system/
 - **Modelo**: gemini-pro
 
 ### Outras opções
+
 O sistema pode ser expandido para suportar:
+
 - OpenAI GPT
 - Anthropic Claude
 - Llama via Replicate
@@ -190,7 +194,9 @@ O sistema pode ser expandido para suportar:
 - **Hospedagem**: Vercel
 
 ## ⚙️ Configurações Avançadas
+
 ### Melhorar a busca
+
 Edite `app/api/search/route.ts` para ajustar:
 
 - Número de resultados retornados
@@ -204,27 +210,34 @@ Edite `app/api/search/route.ts` para ajustar:
 3. Execute `npm run process-docs` novamente
 
 ### Personalizar perguntas frequentes
+
 ### Personalizar perguntas frequentes
+
 Edite o array `frequentQuestions` em `app/page.tsx`
 
 ### Personalizar seções
+
 Edite o array `sections` em `app/page.tsx`
 
 ## 🐛 Troubleshooting
 
 ### Erro: "Documentos não processados"
+
 - Execute `npm run process-docs`
 - Verifique se os arquivos estão em `data/documents/`
 
 ### Erro de autenticação
+
 - Verifique as variáveis de ambiente
 - Limpe os cookies do navegador
 
 ### API Gemini não responde
+
 - Verifique se a chave API está correta
 - Confirme que você não excedeu o limite gratuito
 
 ### Build falha no Vercel
+
 - Certifique-se de que `documents.json` foi commitado
 - Verifique as variáveis de ambiente no dashboard
 

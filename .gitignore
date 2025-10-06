@@ -36,6 +36,7 @@ next-env.d.ts
 # Documents - Original files are too large for GitHub
 # Users should add their own documents to data/documents/
 /data/documents
+!/ data/documents/README.md
 /data/processed
 
 # Large files in root directory (PowerPoint and PDFs)
