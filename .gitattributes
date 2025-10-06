@@ -1,0 +1,22 @@
+# .gitattributes - Configuração de arquivos Git
+# Sistema SAEB 2025
+
+# Arquivos grandes (LFS - Large File Storage)
+*.pdf filter=lfs diff=lfs merge=lfs -text
+*.pptx filter=lfs diff=lfs merge=lfs -text
+*.PDF filter=lfs diff=lfs merge=lfs -text
+*.PPTX filter=lfs diff=lfs merge=lfs -text
+
+# Documentos processados
+data/processed/*.json -text
+
+# Arquivos de texto com line endings Unix
+*.md text eol=lf
+*.json text eol=lf
+*.js text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.css text eol=lf
+
+# Arquivos do Windows
+*.bat text eol=crlf
