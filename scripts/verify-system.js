@@ -98,8 +98,6 @@ if (fs.existsSync(docsDir)) {
   console.log('  ✓ data/documents/ encontrado');
   
   const expectedDocs = [
-    'SAEB2025_Apresentação_2_Ano_VF.pptx',
-    'SAEB2025_Apresentação_Aplicadores_5_9_3_VF.pptx',
     'SCAN0000.PDF',
     'SCAN0001.PDF'
   ];

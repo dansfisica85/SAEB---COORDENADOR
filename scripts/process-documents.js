@@ -114,13 +114,12 @@ async function processPPTX(filePath) {
 // Processar todos os documentos
 async function processAllDocuments() {
   console.log('Iniciando processamento de documentos...\n');
+  console.log('⚠️  IMPORTANTE: Processando APENAS os PDFs SCAN0000 e SCAN0001\n');
   
   const documents = [];
   
-  // Lista de arquivos para processar
+  // Lista de arquivos para processar - APENAS OS 2 PDFs SCAN
   const files = [
-    'SAEB2025_Apresentação_2_Ano_VF.pptx',
-    'SAEB2025_Apresentação_Aplicadores_5_9_3_VF.pptx',
     'SCAN0000.PDF',
     'SCAN0001.PDF'
   ];

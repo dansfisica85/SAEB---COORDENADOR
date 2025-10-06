@@ -10,15 +10,15 @@ Esta pasta deve conter os **documentos originais** para processamento pelo siste
 
 ### 1. Adicione seus documentos aqui
 
-Coloque os arquivos PowerPoint (.pptx) e PDF (.pdf) nesta pasta:
+⚠️ **IMPORTANTE:** Este sistema processa **APENAS** os seguintes PDFs:
 
 ```
 data/documents/
-├── SAEB2025_Apresentação_2_Ano_VF.pptx
-├── SAEB2025_Apresentação_Aplicadores_5_9_3_VF.pptx
 ├── SCAN0000.PDF
 └── SCAN0001.PDF
 ```
+
+Estes são os **únicos documentos** usados como fonte de dados para o sistema.
 
 ### 2. Execute o processamento
 
