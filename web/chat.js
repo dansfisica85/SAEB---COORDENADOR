@@ -196,10 +196,45 @@ async function callGeminiAPI(userMessage, context) {
     // Monta o prompt com contexto
     const fullPrompt = `${context}\n\nPergunta do usuário: ${userMessage}`;
     
-    if (provider === 'openrouter') {
+    if (provider === 'huggingface') {
+        // ==== HUGGING FACE API (GRATUITO) ====
+        const payload = {
+            inputs: fullPrompt,
+            parameters: {
+                temperature: CONFIG.temperature,
+                max_new_tokens: CONFIG.maxTokens,
+                return_full_text: false
+            }
+        };
+        
+        const response = await fetch(CONFIG.apiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.text().catch(() => 'Erro desconhecido');
+            console.error('Erro da API:', errorData);
+            throw new Error(`Erro na API: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (Array.isArray(data) && data.length > 0 && data[0].generated_text) {
+            return data[0].generated_text.trim();
+        } else if (data.generated_text) {
+            return data.generated_text.trim();
+        }
+        
+        throw new Error('Resposta inesperada da API');
+        
+    } else if (provider === 'openrouter') {
         // ==== OPENROUTER API ====
         const payload = {
-            model: CONFIG.model,
+            model: CONFIG.openrouterModel,
             messages: [
                 {
                     role: 'user',
@@ -210,11 +245,11 @@ async function callGeminiAPI(userMessage, context) {
             max_tokens: CONFIG.maxTokens
         };
         
-        const response = await fetch(CONFIG.apiEndpoint, {
+        const response = await fetch(CONFIG.openrouterEndpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${CONFIG.apiKey}`
+                'Authorization': `Bearer ${CONFIG.openrouterKey}`
             },
             body: JSON.stringify(payload)
         });

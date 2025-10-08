@@ -5,19 +5,23 @@
 
 const CONFIG = {
     // ==================================================
-    // OPÇÃO 1: OpenRouter (GRATUITO - RECOMENDADO)
-    // Crie sua chave em: https://openrouter.ai/keys
+    // OPÇÃO 1: Hugging Face (GRATUITO E CONFIÁVEL)
+    // Sem necessidade de chave - Funciona direto!
     // ==================================================
-    provider: 'openrouter', // ou 'gemini'
+    provider: 'huggingface',
     
-    // API Key do OpenRouter (substitua pela sua chave)
-    apiKey: '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',
+    // Endpoint da API Hugging Face (gratuito)
+    apiEndpoint: 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium',
     
-    // Endpoint da API OpenRouter
-    apiEndpoint: 'https://openrouter.ai/api/v1/chat/completions',
+    // Modelo gratuito (sem chave necessária)
+    model: 'microsoft/DialoGPT-medium',
     
-    // Modelo gratuito do OpenRouter
-    model: 'meta-llama/llama-3.2-3b-instruct:free',
+    // ==================================================
+    // OPÇÃO 2: OpenRouter (se conseguir ativar)
+    // ==================================================
+    openrouterKey: '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',
+    openrouterEndpoint: 'https://openrouter.ai/api/v1/chat/completions',
+    openrouterModel: 'meta-llama/llama-3.2-3b-instruct:free',
     
     // ==================================================
     // OPÇÃO 2: Google Gemini (se ativar a API)
