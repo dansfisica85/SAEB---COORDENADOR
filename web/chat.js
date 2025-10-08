@@ -196,7 +196,44 @@ async function callGeminiAPI(userMessage, context) {
     // Monta o prompt com contexto
     const fullPrompt = `${context}\n\nPergunta do usuário: ${userMessage}`;
     
-    if (provider === 'offline') {
+    if (provider === 'openrouter') {
+        // ==== OPENROUTER API ====
+        const payload = {
+            model: CONFIG.model,
+            messages: [
+                {
+                    role: 'user',
+                    content: fullPrompt
+                }
+            ],
+            temperature: CONFIG.temperature,
+            max_tokens: CONFIG.maxTokens
+        };
+        
+        const response = await fetch(CONFIG.apiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${CONFIG.apiKey}`
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            console.error('Erro da API:', errorData);
+            throw new Error(`Erro na API: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.choices && data.choices.length > 0) {
+            return data.choices[0].message.content;
+        }
+        
+        throw new Error('Resposta inesperada da API');
+        
+    } else if (provider === 'offline') {
         // ==== SISTEMA OFFLINE ====
         // Busca resposta baseada nos documentos
         return generateOfflineResponse(userMessage, context);
