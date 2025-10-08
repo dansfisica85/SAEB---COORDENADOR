@@ -196,10 +196,15 @@ async function callGeminiAPI(userMessage, context) {
     // Monta o prompt com contexto
     const fullPrompt = `${context}\n\nPergunta do usuário: ${userMessage}`;
     
-    if (provider === 'openrouter') {
+    if (provider === 'offline') {
+        // ==== SISTEMA OFFLINE ====
+        // Busca resposta baseada nos documentos
+        return generateOfflineResponse(userMessage, context);
+        
+    } else if (provider === 'openrouter') {
         // ==== OPENROUTER API ====
         const payload = {
-            model: CONFIG.model,
+            model: CONFIG.openrouterModel,
             messages: [
                 {
                     role: 'user',
@@ -210,11 +215,11 @@ async function callGeminiAPI(userMessage, context) {
             max_tokens: CONFIG.maxTokens
         };
         
-        const response = await fetch(CONFIG.apiEndpoint, {
+        const response = await fetch(CONFIG.openrouterEndpoint, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${CONFIG.apiKey}`
+                'Authorization': `Bearer ${CONFIG.openrouterKey}`
             },
             body: JSON.stringify(payload)
         });
@@ -232,11 +237,6 @@ async function callGeminiAPI(userMessage, context) {
         }
         
         throw new Error('Resposta inesperada da API');
-        
-    } else if (provider === 'offline') {
-        // ==== SISTEMA OFFLINE ====
-        // Busca resposta baseada nos documentos
-        return generateOfflineResponse(userMessage, context);
         
     } else if (provider === 'openrouter') {
         // ==== OPENROUTER API ====

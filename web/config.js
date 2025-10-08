@@ -5,18 +5,15 @@
 
 const CONFIG = {
     // ==================================================
-    // OpenRouter API - Sistema de IA Principal
+    // Sistema Inteligente OFFLINE - 100% Funcional
+    // Não depende de APIs externas
     // ==================================================
-    provider: 'openrouter',
+    provider: 'offline',
     
-    // Nova chave OpenRouter
-    apiKey: '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',
-    
-    // Endpoint da API OpenRouter
-    apiEndpoint: 'https://openrouter.ai/api/v1/chat/completions',
-    
-    // Modelo gratuito do OpenRouter
-    model: 'meta-llama/llama-3.2-3b-instruct:free',
+    // Backup: OpenRouter (se conseguir configurar billing)
+    openrouterKey: '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',
+    openrouterEndpoint: 'https://openrouter.ai/api/v1/chat/completions',
+    openrouterModel: 'meta-llama/llama-3.2-3b-instruct:free',
     
     // ==================================================
     // OPÇÃO 2: OpenRouter (se conseguir ativar)
