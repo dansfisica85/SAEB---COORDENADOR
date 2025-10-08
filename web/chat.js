@@ -188,55 +188,92 @@ function clearMessages() {
 // ============================================
 // API GEMINI
 // ============================================
+// API - Suporta OpenRouter e Google Gemini
+// ============================================
 async function callGeminiAPI(userMessage, context) {
-    const apiKey = CONFIG.apiKey;
-    const endpoint = CONFIG.apiEndpoint;
+    const provider = CONFIG.provider || 'openrouter';
     
     // Monta o prompt com contexto
     const fullPrompt = `${context}\n\nPergunta do usuário: ${userMessage}`;
     
-    // Prepara o payload
-    const payload = {
-        contents: [{
-            parts: [{
-                text: fullPrompt
-            }]
-        }],
-        generationConfig: {
-            temperature: CONFIG.model.temperature,
-            topK: CONFIG.model.topK,
-            topP: CONFIG.model.topP,
-            maxOutputTokens: CONFIG.model.maxOutputTokens,
-        },
-        safetySettings: CONFIG.safetySettings
-    };
-    
-    // Faz a requisição
-    const response = await fetch(`${endpoint}?key=${apiKey}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-    });
-    
-    if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Erro da API:', errorData);
-        throw new Error(`Erro na API: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    
-    // Extrai o texto da resposta
-    if (data.candidates && data.candidates.length > 0) {
-        const candidate = data.candidates[0];
-        if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
-            return candidate.content.parts[0].text;
+    if (provider === 'openrouter') {
+        // ==== OPENROUTER API ====
+        const payload = {
+            model: CONFIG.model,
+            messages: [
+                {
+                    role: 'user',
+                    content: fullPrompt
+                }
+            ],
+            temperature: CONFIG.temperature,
+            max_tokens: CONFIG.maxTokens
+        };
+        
+        const response = await fetch(CONFIG.apiEndpoint, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${CONFIG.apiKey}`,
+                'HTTP-Referer': window.location.origin,
+                'X-Title': 'SAEB 2025 Coordenador'
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            console.error('Erro da API:', errorData);
+            throw new Error(`Erro na API: ${response.status}`);
         }
+        
+        const data = await response.json();
+        
+        if (data.choices && data.choices.length > 0) {
+            return data.choices[0].message.content;
+        }
+        
+        throw new Error('Resposta inesperada da API');
+        
+    } else {
+        // ==== GOOGLE GEMINI API ====
+        const payload = {
+            contents: [{
+                parts: [{
+                    text: fullPrompt
+                }]
+            }],
+            generationConfig: {
+                temperature: CONFIG.temperature,
+                maxOutputTokens: CONFIG.maxTokens,
+            }
+        };
+        
+        const response = await fetch(`${CONFIG.geminiEndpoint}?key=${CONFIG.geminiKey}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Erro da API:', errorData);
+            throw new Error(`Erro na API: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.candidates && data.candidates.length > 0) {
+            const candidate = data.candidates[0];
+            if (candidate.content && candidate.content.parts && candidate.content.parts.length > 0) {
+                return candidate.content.parts[0].text;
+            }
+        }
+        
+        throw new Error('Resposta inesperada da API');
     }
-    
-    throw new Error('Resposta inesperada da API');
 }
 
 // ============================================

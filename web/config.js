@@ -4,19 +4,30 @@
 // ============================================
 
 const CONFIG = {
-    // API Key do Google Gemini
-    apiKey: 'AIzaSyAo-sK56pBwFeR3dlLXFOetHFyLVCt_9LY',
+    // ==================================================
+    // OPÇÃO 1: OpenRouter (GRATUITO - RECOMENDADO)
+    // Crie sua chave em: https://openrouter.ai/keys
+    // ==================================================
+    provider: 'openrouter', // ou 'gemini'
     
-    // Endpoint da API (atualizado para v1beta)
-    apiEndpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+    // API Key do OpenRouter (substitua pela sua chave)
+    apiKey: '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',
+    
+    // Endpoint da API OpenRouter
+    apiEndpoint: 'https://openrouter.ai/api/v1/chat/completions',
+    
+    // Modelo gratuito do OpenRouter
+    model: 'meta-llama/llama-3.2-3b-instruct:free',
+    
+    // ==================================================
+    // OPÇÃO 2: Google Gemini (se ativar a API)
+    // ==================================================
+    geminiKey: 'AIzaSyAo-sK56pBwFeR3dlLXFOetHFyLVCt_9LY',
+    geminiEndpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
     
     // Configurações do modelo
-    model: {
-        temperature: 0.7,
-        topK: 40,
-        topP: 0.95,
-        maxOutputTokens: 2048,
-    },
+    temperature: 0.7,
+    maxTokens: 2048,
     
     // Configurações de segurança
     safetySettings: [
