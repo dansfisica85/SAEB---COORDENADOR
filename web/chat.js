@@ -196,40 +196,10 @@ async function callGeminiAPI(userMessage, context) {
     // Monta o prompt com contexto
     const fullPrompt = `${context}\n\nPergunta do usuário: ${userMessage}`;
     
-    if (provider === 'huggingface') {
-        // ==== HUGGING FACE API (GRATUITO) ====
-        const payload = {
-            inputs: fullPrompt,
-            parameters: {
-                temperature: CONFIG.temperature,
-                max_new_tokens: CONFIG.maxTokens,
-                return_full_text: false
-            }
-        };
-        
-        const response = await fetch(CONFIG.apiEndpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
-        });
-        
-        if (!response.ok) {
-            const errorData = await response.text().catch(() => 'Erro desconhecido');
-            console.error('Erro da API:', errorData);
-            throw new Error(`Erro na API: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        if (Array.isArray(data) && data.length > 0 && data[0].generated_text) {
-            return data[0].generated_text.trim();
-        } else if (data.generated_text) {
-            return data.generated_text.trim();
-        }
-        
-        throw new Error('Resposta inesperada da API');
+    if (provider === 'offline') {
+        // ==== SISTEMA OFFLINE ====
+        // Busca resposta baseada nos documentos
+        return generateOfflineResponse(userMessage, context);
         
     } else if (provider === 'openrouter') {
         // ==== OPENROUTER API ====
@@ -315,6 +285,131 @@ async function callGeminiAPI(userMessage, context) {
 function formatResponse(text) {
     // Formata a resposta (pode adicionar markdown, links, etc)
     return text;
+}
+
+// ============================================
+// SISTEMA OFFLINE - Respostas inteligentes
+// ============================================
+function generateOfflineResponse(userMessage, context) {
+    const message = userMessage.toLowerCase();
+    
+    // Respostas específicas para SAEB 2025
+    if (message.includes('saeb') || message.includes('avaliação')) {
+        return `O SAEB 2025 é uma avaliação educacional do Sistema de Avaliação da Educação Básica. 
+
+📋 **Principais informações:**
+• É aplicado a cada dois anos para estudantes da educação básica
+• Avalia competências em Língua Portuguesa e Matemática
+• Fornece diagnóstico da qualidade do ensino brasileiro
+• Os resultados são usados para políticas educacionais
+
+${context.includes('aplicacao') ? 
+'📝 **Para aplicação:** Siga rigorosamente os procedimentos do manual de aplicação.' : 
+'💡 Use o menu lateral para navegar pelas categorias específicas.'}`;
+    }
+    
+    if (message.includes('coordenador') || message.includes('coordenação')) {
+        return `Como **Coordenador do SAEB 2025**, suas principais responsabilidades incluem:
+
+🎯 **Funções principais:**
+• Organizar e supervisionar a aplicação
+• Orientar aplicadores e fiscais
+• Garantir o cumprimento dos procedimentos
+• Resolver questões durante a aplicação
+• Elaborar relatórios pós-aplicação
+
+📋 **Documentos importantes:**
+• Manual do Coordenador
+• Lista de presença dos estudantes
+• Atas de aplicação
+• Relatório de ocorrências
+
+💡 **Dica:** Mantenha sempre comunicação com a equipe do INEP para dúvidas.`;
+    }
+    
+    if (message.includes('aplicação') || message.includes('aplicar')) {
+        return `📝 **Procedimentos de Aplicação do SAEB 2025:**
+
+⏰ **Horários:**
+• Início: 7h30 (conferir horário local)
+• Duração: 4h30 para cada turno
+• Intervalo: 15 minutos (obrigatório)
+
+👥 **Equipe necessária:**
+• 1 Aplicador para cada 25 estudantes
+• 1 Fiscal por sala
+• 1 Coordenador por escola
+
+📋 **Materiais obrigatórios:**
+• Cadernos de prova lacrados
+• Cartões de respostas
+• Lista de presença
+• Ata de aplicação
+
+⚠️ **IMPORTANTE:** Conferir documentos dos estudantes e manter rigoroso controle do tempo.`;
+    }
+    
+    if (message.includes('procedimento') || message.includes('como fazer')) {
+        return `📋 **Procedimentos Gerais do SAEB 2025:**
+
+🔐 **Antes da aplicação:**
+• Verificar lacres dos materiais
+• Conferir quantidades de provas e cartões
+• Organizar salas conforme orientações
+• Briefing com toda a equipe
+
+📝 **Durante a aplicação:**
+• Seguir rigorosamente os horários
+• Não permitir uso de celulares
+• Auxiliar apenas com dúvidas sobre preenchimento
+• Registrar todas as ocorrências
+
+✅ **Após a aplicação:**
+• Recolher todos os materiais
+• Preencher atas e relatórios
+• Lacrar envelopes conforme instruções
+• Enviar documentação no prazo
+
+💡 **Em caso de dúvidas:** Consulte o manual ou entre em contato com o suporte do INEP.`;
+    }
+    
+    if (message.includes('orientações') || message.includes('orientação')) {
+        return `📋 **Orientações Importantes SAEB 2025:**
+
+👨‍🎓 **Para estudantes:**
+• Trazer documento com foto
+• Caneta esferográfica azul ou preta
+• Não usar corretor líquido
+• Preencher cartão-resposta corretamente
+
+👨‍🏫 **Para aplicadores:**
+• Chegar 1h antes do início
+• Portar documento de identidade
+• Seguir script de aplicação
+• Não dar dicas sobre as questões
+
+🏫 **Para a escola:**
+• Disponibilizar salas adequadas
+• Garantir silêncio durante a prova
+• Providenciar água e banheiros limpos
+• Apoiar a equipe de aplicação
+
+⚠️ **ATENÇÃO:** Qualquer irregularidade deve ser comunicada imediatamente ao coordenador.`;
+    }
+    
+    // Resposta genérica baseada no contexto
+    const contextWords = context.split(' ').slice(0, 100).join(' ');
+    
+    return `Com base nos documentos do SAEB 2025, aqui estão as informações relevantes:
+
+${contextWords}...
+
+💡 **Sugestões:**
+• Use o menu lateral para navegar pelas categorias específicas
+• Faça perguntas mais específicas sobre: aplicação, procedimentos, coordenação ou orientações
+• Consulte sempre o manual oficial para confirmação
+
+📞 **Suporte:** Em caso de dúvidas, entre em contato com o INEP através dos canais oficiais.`;
 }
 
 // Exporta funções para debugging

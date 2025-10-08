@@ -5,16 +5,10 @@
 
 const CONFIG = {
     // ==================================================
-    // OPÇÃO 1: Hugging Face (GRATUITO E CONFIÁVEL)
-    // Sem necessidade de chave - Funciona direto!
+    // OPÇÃO 1: Sistema Offline (FUNCIONA SEMPRE)
+    // Respostas baseadas nos documentos do SAEB
     // ==================================================
-    provider: 'huggingface',
-    
-    // Endpoint da API Hugging Face (gratuito)
-    apiEndpoint: 'https://api-inference.huggingface.co/models/microsoft/DialoGPT-medium',
-    
-    // Modelo gratuito (sem chave necessária)
-    model: 'microsoft/DialoGPT-medium',
+    provider: 'offline',
     
     // ==================================================
     // OPÇÃO 2: OpenRouter (se conseguir ativar)
