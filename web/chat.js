@@ -214,9 +214,7 @@ async function callGeminiAPI(userMessage, context) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${CONFIG.apiKey}`,
-                'HTTP-Referer': window.location.origin,
-                'X-Title': 'SAEB 2025 Coordenador'
+                'Authorization': `Bearer ${CONFIG.apiKey}`
             },
             body: JSON.stringify(payload)
         });
