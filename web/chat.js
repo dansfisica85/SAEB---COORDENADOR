@@ -69,7 +69,7 @@ function setupNavigation() {
             this.classList.add('active');
             
             // Atualiza categoria
-            currentCategory = this.dataset.category;
+            currentCategory = this.dataset.section || 'todas';
             console.log('Categoria alterada para:', currentCategory);
             
             // Limpa mensagens (opcional)
