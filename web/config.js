@@ -7,8 +7,8 @@ const CONFIG = {
     // API Key do Google Gemini
     apiKey: 'AIzaSyAo-sK56pBwFeR3dlLXFOetHFyLVCt_9LY',
     
-    // Endpoint da API (atualizado para v1)
-    apiEndpoint: 'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash:generateContent',
+    // Endpoint da API (atualizado para v1beta)
+    apiEndpoint: 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
     
     // Configurações do modelo
     model: {
